@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="./style.css">
+		<script src="./problems.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css" integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js" integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
+        onload=""></script>
+	</head>
+	<body>
+		<div id="ctl-header">
+		<h1>MindTree</h1>
+		<div class="controls">
+			<div>
+				<p>Title</p>
+				<input placeholder="Worksheet Title" name="ws-title">
+			</div>
+			<div>
+				<p>Date</p>
+				<input placeholder="Date" name="ws-date">
+			</div>
+			<div>
+				<p>Instructions</p>
+				<input placeholder="Instructions" name="ws-desc">
+			</div>
+			<div>
+				<p>Number of problems</p>
+				<input type="number" min="1" max="100" placeholder="10" value="20" name="p-num">
+			</div>
+			<div>
+				<p>Difficulty</p>
+			<input type="number" min="1" max="3" placeholder="1" value="1" name="p-diff">
+			</div>
+			</div>
+			<button id="submit" onClick="getProblems()">Generate!</button>
+		</div>
+		<hr>
+
+		<div class="page">
+		<header>
+			<h1 id="ws-title"></h1>
+			<p>Date: <time datetime="" id="ws-date"></time></p>
+			<p>Name: .................................</p>
+			<p id="ws-desc"></p>
+		</header>
+		<main></main>
+		<footer>
+			
+		</footer>
+		</div>
+		<script>
+			"use strict";
+			// Initialize defaults
+			const defText = {
+				"ws-title": "Math Worksheet",
+				"ws-desc": "Solve the following problems. Show your work.",
+				"ws-date": new Date().toDateString()
+			};
+
+			for (const [e, def] of Object.entries(defText)) {
+				document.getElementById(e).textContent = def;
+				pairListen(e);
+			}
+
+			function pairListen(name) {
+				const inp = document.querySelector(`input[name='${name}']`);
+				const out = document.querySelector(`#${name}`);
+				inp.addEventListener("input", e => {
+						out.textContent=e.target.value || defText[name];
+				});
+			}
+
+			function cls()  {
+				document.querySelector("main").innerHTML = "";
+			}
+
+			function getProblems() {
+				const mainpage = document.querySelector("main");
+				const pNum = document.querySelector("input[name='p-num']").value;
+				const diff = document.querySelector("input[name='p-diff']").value;
+
+				cls();
+
+				for (var i = 0; i < pNum; ++i)
+					mainpage.innerHTML += `
+					<div class="problem">
+						<div class="p-num">(${i+1})</div>
+						<div>${q_problems[randIn(q_problems.length)](difficulty(diff), difficulty(diff))}</div>
+					</div>
+					`;
+
+				renderMathInElement(document.body);
+			}
+
+			function randIn(n) {
+				return Math.floor(Math.random() * n);
+			}
+
+			function difficulty(i) {
+				return Math.floor(Math.random()*(20*i)-10*i);
+			}
+
+			window.onload = function() {getProblems(); renderMathInElement(document.main)};
+
+			// document.querySelector("input[name='ws-title']").addEventListener("input", e => document.querySelector("#ws-title"))
+		</script>
+	</body>
+</html>
